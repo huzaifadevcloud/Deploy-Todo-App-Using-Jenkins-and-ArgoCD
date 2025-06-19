@@ -50,8 +50,18 @@ pipeline {
         stage('Update K8S manifest & push to Repo'){
             steps {
                 script{
-                    withCredentials([usernamePassword(credentialsId: 'github', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_TOKEN',
-                    string(credentialsId: 'git-user-name', variable: 'GIT_USER_NAME'), string(credentialsId: 'git-user-email', variable: 'GIT_USER_EMAIL'))]) {
+                    withCredentials([
+                    
+                        usernamePassword(credentialsId: 'github', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_TOKEN'),
+                        string(credentialsId: 'git-user-name', variable: 'GIT_USER_NAME'),
+                        string(credentialsId: 'git-user-email', variable: 'GIT_USER_EMAIL')
+                    
+                    
+                    ]) 
+                    
+                    
+                    
+                    {
                         sh '''
                         cat deploy.yaml
                         sed -i 's/32/${BUILD_NUMBER}/g' deploy.yaml
