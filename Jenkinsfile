@@ -64,7 +64,8 @@ pipeline {
                     {
                         sh '''
                         cat deploy.yaml
-                        sed -i 's/32/${BUILD_NUMBER}/g' deploy.yaml
+                        sed -i "s|huzaifafev/todo-app:v[0-9]*|huzaifafev/todo-app:v${BUILD_NUMBER}|g" deploy.yaml
+                        echo "Updated the image tag to v${BUILD_NUMBER}"
                         cat deploy.yaml
                         git add deploy.yaml
                         git config --global user.name "$GIT_USER_NAME"
