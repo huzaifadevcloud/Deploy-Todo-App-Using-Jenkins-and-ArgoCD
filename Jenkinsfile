@@ -73,7 +73,7 @@ pipeline {
                         # Now your git commit will use these values
                         git commit -m 'Updated the deploy yaml | Jenkins Pipeline'
                         git remote -v
-                        git push https://github.com/huzaifadevcloud/cicd-manifests HEAD:main
+                        git push https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/huzaifadevcloud/cicd-manifests HEAD:main
                         '''
                     }
                                             
