@@ -10,7 +10,8 @@ pipeline {
         
         stage('Checkout'){
            steps {
-                git url: 'https://github.com/huzaifadevcloud/Deploy-Todo-App-Using-Jenkins-and-ArgoCD',
+                git credentialsId: 'github',
+                url: 'https://github.com/huzaifadevcloud/Deploy-Todo-App-Using-Jenkins-and-ArgoCD',
                 branch: 'main'
            }
         }
@@ -40,7 +41,8 @@ pipeline {
         
         stage('Checkout K8S manifest SCM'){
             steps {
-                git url: 'https://github.com/huzaifadevcloud/cicd-manifests',
+                git credentialsId: 'github',
+                url: 'https://github.com/huzaifadevcloud/cicd-manifests',
                 branch: 'main'
             }
         }
@@ -48,7 +50,8 @@ pipeline {
         stage('Update K8S manifest & push to Repo'){
             steps {
                 script{
-                    sh '''
+                    withCredentials([usernamePassword(credentialsId: 'github', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_TOKEN')]) {
+                        sh '''
                         cat deploy.yaml
                         sed -i 's/32/9/g' deploy.yaml
                         cat deploy.yaml
@@ -56,7 +59,9 @@ pipeline {
                         git commit -m 'Updated the deploy yaml | Jenkins Pipeline'
                         git remote -v
                         git push https://github.com/huzaifadevcloud/cicd-manifests HEAD:main
-                        '''                        
+                        '''
+                    }
+                                            
                 }
             }
         }
