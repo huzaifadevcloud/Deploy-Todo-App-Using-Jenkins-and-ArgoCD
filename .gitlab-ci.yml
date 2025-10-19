@@ -50,11 +50,12 @@ update_artifacts:
     - git config --global user.name "$GITHUB_USERNAME"
     - git config --global user.email "$GITHUB_EMAIL"
     - git clone https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/$GITHUB_USERNAME/$GITHUB_REPO.git
+    - git checkout main
+    - git pull origin main --rebase
     - cd deploy
     - cat deploy.yaml
     - 'sed -i -E "s|^([[:space:]]*)image:[[:space:]]*.*|\\1image: huzaifadev/myapp:${IMAGE_TAG}|g" deploy.yaml'
     - cat deploy.yaml
     - git add .
     - git commit -m "Changed artifact file"
-    - git checkout main
-    - git push https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/$GITHUB_USERNAME/$GITHUB_REPO.git HEAD:main
+    - git push https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/$GITHUB_USERNAME/$GITHUB_REPO.git main
