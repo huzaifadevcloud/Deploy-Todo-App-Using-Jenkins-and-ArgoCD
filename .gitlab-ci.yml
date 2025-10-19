@@ -13,6 +13,8 @@ variables:
   IMAGE_TAG: "${CI_COMMIT_SHORT_SHA}-${CI_COMMIT_TAG}"
   # docker Image Name
   IMAGE_NAME: "${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}"
+  # github repo
+  GITHUB_REPO: Deploy-Todo-App-Using-Jenkins-and-ArgoCD
 
 
 build_image:
@@ -45,16 +47,14 @@ update_artifacts:
   stage: updating artifacts
   script:
     - echo "Logging into Github"
-    - git clone https://github.com/huzaifadevcloud/Deploy-Todo-App-Using-Jenkins-and-ArgoCD
-    - cd deploy
-    - cat deploy.yaml
-    #- 'sed -i -E "s|^[[:space:]]*image:[[:space:]]*.*|  image: huzaifadev/myapp:${IMAGE_TAG}|g" deploy.yaml'
-    - 'sed -i -E "s|^([[:space:]]*)image:[[:space:]]*.*|\\1image: huzaifadev/myapp:${IMAGE_TAG}|g" deploy.yaml'
-    - cat deploy.yaml
     - git config --global user.name "$GITHUB_USERNAME"
     - git config --global user.email "$GITHUB_EMAIL"
-    # Clone the GitHub repo using PAT authentication
     - git clone https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/$GITHUB_REPO.git
-    - git add "Changed artifact file"
+    - cd deploy
+    - cat deploy.yaml
+    - 'sed -i -E "s|^([[:space:]]*)image:[[:space:]]*.*|\\1image: huzaifadev/myapp:${IMAGE_TAG}|g" deploy.yaml'
+    - cat deploy.yaml
+    - git add .
+    - git commit -m "Changed artifact file"
     - git branch -m main
-    - git pu
+    - git push origin main
