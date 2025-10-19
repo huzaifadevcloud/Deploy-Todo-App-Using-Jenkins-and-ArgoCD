@@ -28,10 +28,10 @@ build_image:
     - echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
 
     - echo "Building Docker image..."
-    - docker build -t "$DOCKERHUB_USERNAME/myapp:$image" .
+    - docker build -t "$DOCKERHUB_USERNAME/myapp:$IMAGE_NAME" .
 
     - echo "Pushing Docker image..."
-    - docker push "$DOCKERHUB_USERNAME/myapp:$image"
+    - docker push "$DOCKERHUB_USERNAME/myapp:$IMAGE_NAME"
 
     # Save tag for next stage (if you add more stages later)
     - echo "IMAGE_TAG" >> build.env
