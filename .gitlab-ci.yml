@@ -56,5 +56,5 @@ update_artifacts:
     - cat deploy.yaml
     - git add .
     - git commit -m "Changed artifact file"
-    - git branch -m main
+    - git branch main
     - git push origin main
