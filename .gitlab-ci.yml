@@ -56,5 +56,5 @@ update_artifacts:
     - cat deploy.yaml
     - git add .
     - git commit -m "Changed artifact file"
-    - git remote -v
+    - git checkout main
     - git push https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/$GITHUB_USERNAME/$GITHUB_REPO.git HEAD:main
