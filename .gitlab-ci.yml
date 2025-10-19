@@ -34,8 +34,8 @@ build_image:
     - docker push "$DOCKERHUB_USERNAME/myapp:$IMAGE_NAME"
 
     # Save tag for next stage (if you add more stages later)
-    - echo "IMAGE_TAG" >> build.env
-    - echo "IMAGE_NAME" >> build.env
+    - echo "Image_Tag=IMAGE_TAG" >> build.env
+    - echo "Image_Name=IMAGE_NAME" >> build.env
 
   artifacts:
     reports:
