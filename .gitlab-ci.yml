@@ -41,7 +41,8 @@ update_artifacts:
     - git clone https://github.com/huzaifadevcloud/Deploy-Todo-App-Using-Jenkins-and-ArgoCD
     - cd deploy
     - cat deploy.yaml
-    - 'sed -i -E "s|^[[:space:]]*image:[[:space:]]*.*|  image: huzaifadev/myapp:${IMAGE_TAG}|g" deploy.yaml'
+    #- 'sed -i -E "s|^[[:space:]]*image:[[:space:]]*.*|  image: huzaifadev/myapp:${IMAGE_TAG}|g" deploy.yaml'
+    - 'sed -i -E "s|^([[:space:]]*)image:[[:space:]]*.*|\\1image: huzaifadev/myapp:${IMAGE_TAG}|g" deploy.yaml'
     - cat deploy.yaml
     - git add "Changed artifact file"
     - git branch -m main
