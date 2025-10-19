@@ -12,7 +12,8 @@ variables:
 
 build_image:
   stage: build
-  image: docker:latest
+  image: "${CI_COMMIT_REF_NAME}-${$CI_COMMIT_TAG}"
+
   services:
     - name: docker:24.0.5-dind   # ✅ Specific version that works with SaaS runner
       command: ["--mtu=1460"]    # Recommended for GitLab SaaS networking
@@ -22,13 +23,14 @@ build_image:
     - echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
 
     - echo "Building Docker image..."
-    - docker build -t "$DOCKERHUB_USERNAME/myapp:$CI_COMMIT_SHORT_SHA" .
+    - docker build -t "$DOCKERHUB_USERNAME/myapp:$image" .
 
     - echo "Pushing Docker image..."
-    - docker push "$DOCKERHUB_USERNAME/myapp:$CI_COMMIT_SHORT_SHA"
+    - docker push "$DOCKERHUB_USERNAME/myapp:$image"
 
     # Save tag for next stage (if you add more stages later)
     - echo "IMAGE_TAG=$CI_COMMIT_SHORT_SHA" >> build.env
+    - echo "IMAGE_Name=$image" >> build.env
 
   artifacts:
     reports:
@@ -44,6 +46,10 @@ update_artifacts:
     #- 'sed -i -E "s|^[[:space:]]*image:[[:space:]]*.*|  image: huzaifadev/myapp:${IMAGE_TAG}|g" deploy.yaml'
     - 'sed -i -E "s|^([[:space:]]*)image:[[:space:]]*.*|\\1image: huzaifadev/myapp:${IMAGE_TAG}|g" deploy.yaml'
     - cat deploy.yaml
+    - git config --global user.name "$GITHUB_USERNAME"
+    - git config --global user.email "$GITHUB_EMAIL"
+    # Clone the GitHub repo using PAT authentication
+    - git clone https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/$GITHUB_REPO.git
     - git add "Changed artifact file"
     - git branch -m main
-    - git push 
+    - git pu
