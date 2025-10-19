@@ -1,5 +1,6 @@
 stages:
   - build
+  - updating artifacts
 
 variables:
   # required for docker:dind non-TLS mode
@@ -32,3 +33,16 @@ build_image:
   artifacts:
     reports:
       dotenv: build.env
+
+update_artifacts:
+  stage: updating artifacts
+  script:
+    - echo "Logging into Github"
+    - git clone https://github.com/huzaifadevcloud/Deploy-Todo-App-Using-Jenkins-and-ArgoCD
+    - cd deploy
+    - cat deploy.yaml
+    - sed -i -E \ 
+      "s|^\s*image:\s*.*|  image: huzaifadev/myapp:$IMAGE_TAG|g" \ 
+      deploy.yaml
+    - cat deploy.yaml
+    
