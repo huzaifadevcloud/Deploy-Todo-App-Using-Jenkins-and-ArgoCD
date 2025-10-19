@@ -9,10 +9,15 @@ variables:
   DOCKER_DRIVER: overlay2
   # ensure docker CLI talks to the service by hostname 'docker'
   DOCKER_HOST: tcp://docker:2375/
+  # docker Image Tag
+  IMAGE_TAG: "${CI_COMMIT_SHORT_SHA}-${CI_COMMIT_TAG}"
+  # docker Image Name
+  IMAGE_NAME: "${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}"
+
 
 build_image:
   stage: build
-  image: "${CI_COMMIT_REF_NAME}-${$CI_COMMIT_TAG}"
+  image: docker:latest
 
   services:
     - name: docker:24.0.5-dind   # ✅ Specific version that works with SaaS runner
@@ -29,8 +34,8 @@ build_image:
     - docker push "$DOCKERHUB_USERNAME/myapp:$image"
 
     # Save tag for next stage (if you add more stages later)
-    - echo "IMAGE_TAG=$CI_COMMIT_SHORT_SHA" >> build.env
-    - echo "IMAGE_Name=$image" >> build.env
+    - echo "IMAGE_TAG" >> build.env
+    - echo "IMAGE_NAME" >> build.env
 
   artifacts:
     reports:
