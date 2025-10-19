@@ -13,9 +13,8 @@ build_image:
   stage: build
   image: docker:latest
   services:
-    - docker:dind
-  # allow docker:dind to run properly
-  privileged: true
+    - name: docker:24.0.5-dind   # ✅ Specific version that works with SaaS runner
+      command: ["--mtu=1460"]    # Recommended for GitLab SaaS networking
   script:
     - echo "Logging in to Docker Hub..."
     # use --password-stdin so login works in non-interactive CI
